@@ -106,6 +106,7 @@ class PlayState extends MusicBeatState
 	public static var dad:Character;
 	public static var gf:Character;
 	public static var boyfriend:Boyfriend;
+	private var garcellotired:Character;
 
 	public var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -342,6 +343,15 @@ class PlayState extends MusicBeatState
 				dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
 			case 'thorns':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
+				case 'headache':
+					dialogue = CoolUtil.coolTextFile(Paths.txt('headache/headacheDialogue'));
+				case 'nerves':
+					dialogue = CoolUtil.coolTextFile(Paths.txt('nerves/nervesDialogue'));
+				case 'release':
+					dialogue = CoolUtil.coolTextFile(Paths.txt('release/releaseDialogue'));
+				case 'fading':
+					dialogue = CoolUtil.coolTextFile(Paths.txt('fading/fadingDialogue'));
+
 		}
 
 		switch(SONG.stage)
@@ -541,7 +551,79 @@ class PlayState extends MusicBeatState
 						evilSnow.antialiasing = true;
 					add(evilSnow);
 					}
-			case 'school':
+			case 'garAlley':
+		          {
+		                  //defaultCamZoom = 0.9;
+
+						  var bg:FlxSprite = new FlxSprite(-500, -170).loadGraphic(Paths.image('cancer/garStagebg','week7'));
+						  bg.antialiasing = true;
+						  bg.scrollFactor.set(0.7, 0.7);
+						  bg.active = false;
+						  add(bg);
+
+						  var bgAlley:FlxSprite = new FlxSprite(-500, -200).loadGraphic(Paths.image('cancer/garStage','week7'));
+						  bgAlley.antialiasing = true;
+						  bgAlley.scrollFactor.set(0.9, 0.9);
+						  bgAlley.active = false;
+						  add(bgAlley);
+
+					}
+			case 'garAlleyDead':
+		          {
+		                  //defaultCamZoom = 0.9;
+
+						  var bg:FlxSprite = new FlxSprite(-500, -170).loadGraphic(Paths.image('cancer/garStagebgAlt','week7'));
+						  bg.antialiasing = true;
+						  bg.scrollFactor.set(0.7, 0.7);
+						  bg.active = false;
+						  add(bg);
+
+						  var smoker:FlxSprite = new FlxSprite(0, -290);
+						  smoker.frames = Paths.getSparrowAtlas('cancer/garSmoke','week7');
+						  smoker.setGraphicSize(Std.int(smoker.width * 1.7));
+						  smoker.alpha = 0.3;
+						  smoker.animation.addByPrefix('garsmoke', "smokey", 13);
+						  smoker.animation.play('garsmoke');
+						  smoker.scrollFactor.set(0.7, 0.7);
+						  add(smoker);
+
+						  var bgAlley:FlxSprite = new FlxSprite(-500, -200).loadGraphic(Paths.image('cancer/garStagealt','week7'));
+						  bgAlley.antialiasing = true;
+						  bgAlley.scrollFactor.set(0.9, 0.9);
+						  bgAlley.active = false;
+						  add(bgAlley);
+
+						  var corpse:FlxSprite = new FlxSprite(-230, 540).loadGraphic(Paths.image('cancer/gardead','week7'));
+						  corpse.antialiasing = true;
+						  corpse.scrollFactor.set(0.9, 0.9);
+						  corpse.active = false;
+						  add(corpse);
+
+					}
+			case 'garAlleyDip':
+		          {
+		                  //defaultCamZoom = 0.9;
+
+						  var bg:FlxSprite = new FlxSprite(-500, -170).loadGraphic(Paths.image('cancer/garStagebgRise','week7'));
+						  bg.antialiasing = true;
+						  bg.scrollFactor.set(0.7, 0.7);
+						  bg.active = false;
+						  add(bg);
+
+						  var bgAlley:FlxSprite = new FlxSprite(-500, -200).loadGraphic(Paths.image('cancer/garStageRise','week7'));
+						  bgAlley.antialiasing = true;
+						  bgAlley.scrollFactor.set(0.9, 0.9);
+						  bgAlley.active = false;
+						  add(bgAlley);
+
+						  var corpse:FlxSprite = new FlxSprite(-230, 540).loadGraphic(Paths.image('cancer/gardead','week7'));
+						  corpse.antialiasing = true;
+						  corpse.scrollFactor.set(0.9, 0.9);
+						  corpse.active = false;
+						  add(corpse);
+
+					}
+				case 'school':
 			{
 					curStage = 'school';
 
@@ -823,6 +905,15 @@ class PlayState extends MusicBeatState
 				boyfriend.y += 220;
 				gf.x += 180;
 				gf.y += 300;
+				case 'garAlley':
+					boyfriend.x += 50;
+				case 'garAlleyDead':
+					// evilTrail.changeValuesEnabled(false, false, false, false);
+					// evilTrail.changeGraphic()
+					// add(evilTrail);
+					// evilTrail.scrollFactor.set(1.1, 1.1);
+					boyfriend.x += 50;
+	
 		}
 
 		add(gf);
@@ -833,6 +924,17 @@ class PlayState extends MusicBeatState
 
 		add(dad);
 		add(boyfriend);
+		
+		if (curStage == 'garAlleyDead')
+			{
+				var smoke:FlxSprite = new FlxSprite(0, 0);
+				smoke.frames = Paths.getSparrowAtlas('garSmoke');
+				smoke.setGraphicSize(Std.int(smoke.width * 1.6));
+				smoke.animation.addByPrefix('garsmoke', "smokey", 15);
+				smoke.animation.play('garsmoke');
+				smoke.scrollFactor.set(1.1, 1.1);
+				add(smoke);
+			}
 		if (loadRep)
 		{
 			FlxG.watch.addQuick('rep rpesses',repPresses);
@@ -933,6 +1035,11 @@ class PlayState extends MusicBeatState
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		
+		if(SONG.song.toLowerCase()=='headache' || SONG.song.toLowerCase()=='nerves' || SONG.song.toLowerCase()=='release' || SONG.song.toLowerCase()=='fading'  )
+			{
+				healthBar.createFilledBar(0xFF8E40A5, 0xFF66FF33);
+			}
 		// healthBar
 		add(healthBar);
 
@@ -1042,6 +1149,40 @@ class PlayState extends MusicBeatState
 					schoolIntro(doof);
 				case 'thorns':
 					schoolIntro(doof);
+					case 'headache':
+						var introText:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('garIntroText'));
+						introText.setGraphicSize(Std.int(introText.width * 1.5));
+						introText.scrollFactor.set();
+						camHUD.visible = false;
+	
+						add(introText);
+						FlxG.sound.playMusic(Paths.music('city_ambience'), 0);
+						FlxG.sound.music.fadeIn(1, 0, 0.8);
+	
+						new FlxTimer().start(0.1, function(tmr:FlxTimer)
+						{
+							// FlxG.sound.play(Paths.sound('Lights_Turn_On'));
+						
+							new FlxTimer().start(3, function(tmr:FlxTimer)
+							{
+								FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
+									ease: FlxEase.quadInOut,
+									onComplete: function(twn:FlxTween)
+									{
+										FlxG.sound.music.fadeOut(2.2, 0);
+										remove(introText);
+										camHUD.visible = true;
+										garIntro(doof);
+									}
+								});
+							});
+						});
+					case 'nerves':
+						garIntro(doof);
+					case 'release':
+						garIntro(doof);
+					case 'fading':
+						garIntro(doof);
 				default:
 					startCountdown();
 			}
@@ -1151,6 +1292,81 @@ class PlayState extends MusicBeatState
 		});
 	}
 
+	function garIntro(?dialogueBox:DialogueBox):Void
+		{
+			var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+			black.scrollFactor.set();
+			add(black);
+	
+			var red:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+			red.scrollFactor.set();
+	
+			var sexycutscene:FlxSprite = new FlxSprite();
+			sexycutscene.antialiasing = true;
+			sexycutscene.frames = Paths.getSparrowAtlas('GAR_CUTSCENE');
+			sexycutscene.animation.addByPrefix('video', 'garcutscene', 15, false);
+			sexycutscene.setGraphicSize(Std.int(sexycutscene.width * 2));
+			sexycutscene.scrollFactor.set();
+			sexycutscene.updateHitbox();
+			sexycutscene.screenCenter();
+	
+			if (SONG.song.toLowerCase() == 'nerves' || SONG.song.toLowerCase() == 'release')
+			{
+				remove(black);
+	
+				if (SONG.song.toLowerCase() == 'release')
+				{
+					add(red);
+				}
+			}
+	
+			new FlxTimer().start(0.1, function(tmr:FlxTimer)
+			{
+				black.alpha -= 0.15;
+	
+				if (black.alpha > 0)
+				{
+					tmr.reset(0.1);
+				}
+				else
+				{
+					if (dialogueBox != null)
+					{
+						inCutscene = true;
+	
+						if (SONG.song.toLowerCase() == 'release')
+						{
+							camHUD.visible = false;
+							add(red);
+							add(sexycutscene);
+							sexycutscene.animation.play('video');
+	
+							FlxG.sound.play(Paths.sound('Garcello_Dies'), 1, false, null, true, function()
+								{
+									remove(red);
+									remove(sexycutscene);
+									FlxG.sound.play(Paths.sound('Wind_Fadeout'));
+	
+									FlxG.camera.fade(FlxColor.WHITE, 5, true, function()
+									{
+										add(dialogueBox);
+										camHUD.visible = true;
+									}, true);
+								});
+						}
+						else
+						{
+							add(dialogueBox);
+						}
+					}
+					else
+						startCountdown();
+	
+					remove(black);
+				}
+			});
+		}
+	
 	var startTimer:FlxTimer;
 	var perfectMode:Bool = false;
 
@@ -3400,6 +3616,13 @@ class PlayState extends MusicBeatState
 		#end
 
 
+		if (dad.curCharacter == 'garcellodead' && SONG.song.toLowerCase() == 'release')
+			{
+				if (curStep == 838)
+				{
+					dad.playAnim('garTightBars', true);
+				}
+			}
 
 		// yes this updates every step.
 		// yes this is bad
@@ -3407,11 +3630,33 @@ class PlayState extends MusicBeatState
 		#if windows
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
+		if (dad.curCharacter == 'garcelloghosty' && SONG.song.toLowerCase() == 'fading')
+			{
+				if (curStep == 247)
+				{
+					dad.playAnim('garFarewell', true);
+				}
+			}
 
 		// Updating Discord Rich Presence (with Time Left)
 		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "Acc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC,true,  songLength - Conductor.songPosition);
 		#end
-
+		if (dad.curCharacter == 'garcelloghosty' && SONG.song.toLowerCase() == 'fading')
+			{
+				if (curStep == 240)
+				{
+					new FlxTimer().start(0.1, function(tmr:FlxTimer)
+					{
+						dad.alpha -= 0.05;
+						iconP2.alpha -= 0.05;
+	
+						if (dad.alpha > 0)
+						{
+							tmr.reset(0.1);
+						}
+					});
+				}
+			}
 	}
 
 	var lightningStrikeBeat:Int = 0;
