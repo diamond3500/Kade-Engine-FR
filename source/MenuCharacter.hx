@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
+import StoryMenuState;
 
 class CharacterSetting
 {
@@ -29,7 +30,8 @@ class MenuCharacter extends FlxSprite
 		'pico' => new CharacterSetting(0, 0, 1.0, true),
 		'mom' => new CharacterSetting(-30, 140, 0.85),
 		'parents-christmas' => new CharacterSetting(100, 130, 1.8),
-		'senpai' => new CharacterSetting(-40, -45, 1.4)
+		'senpai' => new CharacterSetting(-40, -45, 1.4),
+		'garcello' => new CharacterSetting(-40, 60, 1.0)
 	];
 
 	private var flipped:Bool = false;
@@ -42,6 +44,7 @@ class MenuCharacter extends FlxSprite
 		antialiasing = true;
 
 		frames = Paths.getSparrowAtlas('campaign_menu_UI_characters');
+		frames = Paths.getSparrowAtlas('campaign_menu_UI_charactersG');
 
 		animation.addByPrefix('bf', "BF idle dance white", 24);
 		animation.addByPrefix('bfConfirm', 'BF HEY!!', 24, false);
@@ -52,10 +55,10 @@ class MenuCharacter extends FlxSprite
 		animation.addByPrefix('mom', "Mom Idle BLACK LINES", 24);
 		animation.addByPrefix('parents-christmas', "Parent Christmas Idle", 24);
 		animation.addByPrefix('senpai', "SENPAI idle Black Lines", 24);
-
+		animation.addByPrefix('garcello', "garcello idle", 24);
 		setGraphicSize(Std.int(width * scale));
 		updateHitbox();
-	}
+		}
 
 	public function setCharacter(character:String):Void
 	{

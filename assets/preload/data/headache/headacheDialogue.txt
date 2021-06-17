@@ -1,16 +1,16 @@
 :bf:beep
-:dad:What's up, little man?
-:dad:Did the smoke catch your attention?
+:dad:Qu'est-ce qu'il y a petit homme ?
+:dad:Est-ce que la fumée a attiré ton attention ?
 :bf:bee bop
-:dad:Yeah, it's pretty cool. You should try it out.
+:dad:Ouais, c'est plûtot cool. Tu devrais essayer.
 :bf:beep bo
-:dad:Are ya sure? Come on...
+:dad:Tu est sur ? Dommage...
 :bf:beep bo
 :dad:Hm...
-:dad:Tell you what.
-:dad:If you beat me in a friendly little rap battle, I'll get off your case.
-:dad:Sound cool, little man?
+:dad:Je vais te dire.
+:dad:Si tu me bat dans un battle de rap, je te laisserai tranquille.
+:dad:ça te vas, petit homme ?
 :bf:beep bo bop!
-:dad:Heh, that got you hyped up. It's settled then.
-:dad:As long as you don't mind me smoking a bit. 
-:dad:Helps calm the nerves, y'know?
+:dad:Hé hé, ça t'a exité. C'est d'accord alors.
+:dad:Juste si tu me laisse fumer un peu. 
+:dad:ça aide a calmer les nerfs, tu comprends?
