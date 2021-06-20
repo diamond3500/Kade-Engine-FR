@@ -1,5 +1,13 @@
 package;
 
+import flixel.animation.FlxAnimation;
+import flixel.animation.FlxAnimationController;
+import openfl.display.GraphicsBitmapFill;
+import openfl.display.Graphics;
+import flixel.addons.effects.chainable.FlxGlitchEffect;
+import flixel.addons.effects.chainable.FlxTrailEffect;
+import flixel.addons.effects.FlxTrailArea;
+import flixel.math.FlxRandom;
 import flixel.input.keyboard.FlxKey;
 import haxe.Exception;
 import openfl.geom.Matrix;
@@ -42,6 +50,7 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.tweens.FlxTween.TweenOptions;
 import flixel.ui.FlxBar;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
@@ -107,6 +116,7 @@ class PlayState extends MusicBeatState
 	public static var gf:Character;
 	public static var boyfriend:Boyfriend;
 	private var garcellotired:Character;
+	var tightBarsText = new FlxText(200, 200, 0, 'jolies paroles petit homme', 50);
 
 	public var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -243,7 +253,7 @@ class PlayState extends MusicBeatState
 				case 'dad-battle': songLowercase = 'dadbattle';
 				case 'philly-nice': songLowercase = 'philly';
 			}
-		
+
 		#if windows
 		executeModchart = FileSystem.exists(Paths.lua(songLowercase  + "/modchart"));
 		#end
@@ -281,7 +291,7 @@ class PlayState extends MusicBeatState
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
 		if (isStoryMode)
 		{
-			detailsText = "Story Mode: Week " + storyWeek;
+			detailsText = "Mode histoire: Semaine " + storyWeek;
 		}
 		else
 		{
@@ -289,10 +299,10 @@ class PlayState extends MusicBeatState
 		}
 
 		// String for when the game is paused
-		detailsPausedText = "Paused - " + detailsText;
+		detailsPausedText = "En Pause - " + detailsText;
 
 		// Updating Discord Rich Presence.
-		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "\nAcc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
+		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "\nAcc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Manqués: " + misses  , iconRPC);
 		#end
 
 
@@ -343,14 +353,14 @@ class PlayState extends MusicBeatState
 				dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
 			case 'thorns':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
-				case 'headache':
-					dialogue = CoolUtil.coolTextFile(Paths.txt('headache/headacheDialogue'));
-				case 'nerves':
-					dialogue = CoolUtil.coolTextFile(Paths.txt('nerves/nervesDialogue'));
-				case 'release':
-					dialogue = CoolUtil.coolTextFile(Paths.txt('release/releaseDialogue'));
-				case 'fading':
-					dialogue = CoolUtil.coolTextFile(Paths.txt('fading/fadingDialogue'));
+			case 'headache':
+				dialogue = CoolUtil.coolTextFile(Paths.txt('headache/headacheDialogue'));
+			case 'nerves':
+				dialogue = CoolUtil.coolTextFile(Paths.txt('nerves/nervesDialogue'));
+			case 'release':
+				dialogue = CoolUtil.coolTextFile(Paths.txt('release/releaseDialogue'));
+			case 'fading':
+				dialogue = CoolUtil.coolTextFile(Paths.txt('fading/fadingDialogue'));
 
 		}
 
@@ -553,7 +563,8 @@ class PlayState extends MusicBeatState
 					}
 			case 'garAlley':
 		          {
-		                  //defaultCamZoom = 0.9;
+		                  defaultCamZoom = 0.7;
+						  curStage = 'garAlley';
 
 						  var bg:FlxSprite = new FlxSprite(-500, -170).loadGraphic(Paths.image('cancer/garStagebg','week7'));
 						  bg.antialiasing = true;
@@ -570,7 +581,8 @@ class PlayState extends MusicBeatState
 					}
 			case 'garAlleyDead':
 		          {
-		                  //defaultCamZoom = 0.9;
+		                  defaultCamZoom = 0.7;
+						  curStage = 'garAlleyDead';
 
 						  var bg:FlxSprite = new FlxSprite(-500, -170).loadGraphic(Paths.image('cancer/garStagebgAlt','week7'));
 						  bg.antialiasing = true;
@@ -599,10 +611,18 @@ class PlayState extends MusicBeatState
 						  corpse.active = false;
 						  add(corpse);
 
+						  //var effectscreen:FlxSprite = new FlxSprite(FlxG.width, FlxG.height);
+						  //var effectsprite:FlxEffectSprite = new FlxEffectSprite(effectscreen);
+						  //var effect:FlxTrailEffect = new FlxTrailEffect(effectsprite, 6, 0.5, 5, true);
+						  //add(effectscreen);
+						  //add(effectsprite);
+						  //effect.apply;
+
 					}
 			case 'garAlleyDip':
 		          {
-		                  //defaultCamZoom = 0.9;
+		                  defaultCamZoom = 0.7;
+						  curStage = 'garAlleyDip';
 
 						  var bg:FlxSprite = new FlxSprite(-500, -170).loadGraphic(Paths.image('cancer/garStagebgRise','week7'));
 						  bg.antialiasing = true;
@@ -907,11 +927,17 @@ class PlayState extends MusicBeatState
 				gf.y += 300;
 				case 'garAlley':
 					boyfriend.x += 50;
+					
 				case 'garAlleyDead':
-					// evilTrail.changeValuesEnabled(false, false, false, false);
-					// evilTrail.changeGraphic()
-					// add(evilTrail);
-					// evilTrail.scrollFactor.set(1.1, 1.1);
+					//var trail:FlxTrailArea = new FlxTrailArea(1000, 900, FlxG.width, FlxG.height);
+					//trail.add(dad);
+					//var evilTrail = new FlxTrail(dad, null, 4, 24, 0.2, 0.069);
+					//var evilPoint  =  new FlxPoint(0, 0);
+					//evilTrail.makeGraphic(10, 5, FlxColor.GREEN, false);
+					//evilTrail.getScreenPosition(evilPoint, camHUD);
+					//evilTrail.changeValuesEnabled(false, false, false, false);
+					//evilTrail.scrollFactor.set(1.1, 1.1);
+					//add(evilTrail);
 					boyfriend.x += 50;
 	
 		}
@@ -1034,17 +1060,17 @@ class PlayState extends MusicBeatState
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		healthBar.createFilledBar(0xFFFF0000, 0xFF0096F1);
 		
 		if(SONG.song.toLowerCase()=='headache' || SONG.song.toLowerCase()=='nerves' || SONG.song.toLowerCase()=='release' || SONG.song.toLowerCase()=='fading'  )
 			{
-				healthBar.createFilledBar(0xFF8E40A5, 0xFF66FF33);
+				healthBar.createFilledBar(0xFF00FF27, 0xFF0096F1);
 			}
 		// healthBar
 		add(healthBar);
 
 		// Add Kade Engine watermark
-		kadeEngineWatermark = new FlxText(4,healthBarBG.y + 50,0,SONG.song + " " + (storyDifficulty == 2 ? "Hard" : storyDifficulty == 1 ? "Normal" : "Easy") + (Main.watermarks ? " - KE " + MainMenuState.kadeEngineVer : ""), 16);
+		kadeEngineWatermark = new FlxText(4,healthBarBG.y + 50,0,SONG.song + " " + (storyDifficulty == 2 ? "Difficile" : storyDifficulty == 1 ? "Normal" : "Facile") + (Main.watermarks ? " - KE " + MainMenuState.kadeEngineVer : ""), 16);
 		kadeEngineWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		kadeEngineWatermark.scrollFactor.set();
 		add(kadeEngineWatermark);
@@ -1150,7 +1176,7 @@ class PlayState extends MusicBeatState
 				case 'thorns':
 					schoolIntro(doof);
 					case 'headache':
-						var introText:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('garIntroText'));
+						var introText:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('cancer/garIntroText'));
 						introText.setGraphicSize(Std.int(introText.width * 1.5));
 						introText.scrollFactor.set();
 						camHUD.visible = false;
@@ -1862,7 +1888,7 @@ class PlayState extends MusicBeatState
 			}
 
 			#if windows
-			DiscordClient.changePresence("PAUSED on " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "Acc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
+			DiscordClient.changePresence("en PAUSE sur " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "Acc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Manqués: " + misses  , iconRPC);
 			#end
 			if (!startTimer.finished)
 				startTimer.active = false;
@@ -3617,12 +3643,29 @@ class PlayState extends MusicBeatState
 
 
 		if (dad.curCharacter == 'garcellodead' && SONG.song.toLowerCase() == 'release')
-			{
+			{			
 				if (curStep == 838)
-				{
-					dad.playAnim('garTightBars', true);
+					{
+						
+						tightBarsText.bold = false;
+						tightBarsText.setFormat(Paths.font('Funkin2.ttf'), 50, 0xFF00FF00, CENTER, OUTLINE, 0xFF000000);
+						dad.playAnim('garTightBars', true);
+						add(tightBarsText);	
+						
+					}
+				if (curStep == 839)
+					{
+						new FlxTimer().start(0.1, function(tmr:FlxTimer)
+							{
+								tightBarsText.alpha -= 0.05;
+
+								if (tightBarsText.alpha > 0)
+								{
+									tmr.reset(0.1);
+								}
+							});
+					}
 				}
-			}
 
 		// yes this updates every step.
 		// yes this is bad
@@ -3639,7 +3682,7 @@ class PlayState extends MusicBeatState
 			}
 
 		// Updating Discord Rich Presence (with Time Left)
-		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "Acc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC,true,  songLength - Conductor.songPosition);
+		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "Acc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Manqués: " + misses  , iconRPC,true,  songLength - Conductor.songPosition);
 		#end
 		if (dad.curCharacter == 'garcelloghosty' && SONG.song.toLowerCase() == 'fading')
 			{

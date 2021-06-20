@@ -1,10 +1,18 @@
 package;
 
+import flixel.util.FlxColor;
+import flixel.FlxObject;
+import flixel.FlxG;
+import flixel.FlxGame;
+import flixel.FlxSprite;
+import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.group.FlxSpriteGroup;
 import Section.SwagSection;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;
 
+using flixel.util.FlxSpriteUtil;
 using StringTools;
 
 typedef SwagSong =
@@ -22,7 +30,6 @@ typedef SwagSong =
 	var stage:String;
 	var validScore:Bool;
 }
-
 class Song
 {
 	public var song:String;
@@ -54,7 +61,7 @@ class Song
 			case 'dad-battle': folderLowercase = 'dadbattle';
 			case 'philly-nice': folderLowercase = 'philly';
 		}
-		
+
 		trace('loading ' + folderLowercase + '/' + jsonInput.toLowerCase());
 
 		var rawJson = Assets.getText(Paths.json(folderLowercase + '/' + jsonInput.toLowerCase())).trim();
