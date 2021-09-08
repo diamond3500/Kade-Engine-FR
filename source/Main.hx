@@ -1,5 +1,7 @@
 package;
 
+
+import webm.WebmPlayer;
 import openfl.display.BlendMode;
 import openfl.text.TextFormat;
 import openfl.display.Application;
@@ -24,7 +26,6 @@ class Main extends Sprite
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
 	public static var watermarks = true; // Whether to put Kade Engine liteartly anywhere
-
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public static function main():Void
@@ -49,6 +50,8 @@ class Main extends Sprite
 		}
 	}
 
+	public static var webmHandler:WebmHandler;
+
 	private function init(?E:Event):Void
 	{
 		if (hasEventListener(Event.ADDED_TO_STAGE))
@@ -72,10 +75,6 @@ class Main extends Sprite
 			gameWidth = Math.ceil(stageWidth / zoom);
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
-
-		#if !debug
-		initialState = TitleState;
-		#end
 
 		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
 

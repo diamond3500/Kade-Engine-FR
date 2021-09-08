@@ -2,7 +2,6 @@ package;
 
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
-import StoryMenuState;
 
 class CharacterSetting
 {
@@ -58,7 +57,7 @@ class MenuCharacter extends FlxSprite
 		animation.addByPrefix('garcello', "garcello idle", 24);
 		setGraphicSize(Std.int(width * scale));
 		updateHitbox();
-		}
+	}
 
 	public function setCharacter(character:String):Void
 	{
